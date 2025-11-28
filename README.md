@@ -68,6 +68,4 @@ Includes:
 | JavaScript | Logic, data handling, UI interactions |
 | LocalStorage | Persistent offline data storage |
 
----
 
-## 📁 Folder Structure
