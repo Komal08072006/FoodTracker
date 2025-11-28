@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Waste Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-color: #38b000;
+      --bg-gradient: radial-gradient(circle at top left, #e0ffcd 0, #c7f9cc 20%, #80ed99 50%, #57cc99 80%, #22577a 100%);
+      --text-dark: #0f172a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--bg-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-dark);
+    }
+
+    .app-shell {
+      max-width: 1150px;
+      width: 100%;
+      padding: 2.2rem 1.5rem;
+    }
+
+    .shell-inner {
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(241,245,249,0.9));
+      box-shadow:
+        0 28px 60px rgba(15,23,42,0.35),
+        0 0 0 1px rgba(255,255,255,0.7);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .top-bar {
+      padding: 0.9rem 1.8rem;
+      border-bottom: 1px solid rgba(226,232,240,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .brand-mini {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: conic-gradient(from 160deg,#38b000,#70e000,#9ef01a,#008000,#38b000);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f7fff3;
+      box-shadow: 0 14px 28px rgba(22,163,74,0.55);
+    }
+
+    .brand-mini span {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .top-links a {
+      font-size: 0.85rem;
+      margin-left: 0.75rem;
+      text-decoration: none;
+      color: rgba(15,23,42,0.75);
+    }
+
+    .top-links a.btn-primary {
+      color: #fff;
+    }
+
+    .hero-row {
+      display: grid;
+      grid-template-columns: minmax(0,3fr) minmax(0,2.3fr);
+      gap: 1.5rem;
+      padding: 1.8rem 1.8rem 1.2rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-row {
+        grid-template-columns: 1fr;
+        padding: 1.6rem 1.2rem 1.1rem;
+      }
+    }
+
+    .hero-copy h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .hero-copy p {
+      font-size: 0.95rem;
+      max-width: 28rem;
+      opacity: 0.8;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-pill {
+      border-radius: 999px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
+      background: rgba(148,163,184,0.16);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg,#38b000,#70e000);
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 0.55rem 1.2rem;
+      box-shadow: 0 12px 26px rgba(56,176,0,0.5);
+      font-size: 0.9rem;
+    }
+
+    .btn-outline {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.55);
+      background: rgba(255,255,255,0.8);
+      padding: 0.5rem 1.05rem;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: rgba(15,23,42,0.85);
+      text-decoration: none;
+    }
+
+    .hero-visual {
+      position: relative;
+      border-radius: 22px;
+      background: radial-gradient(circle at top,#fefce8,#f1f5f9);
+      box-shadow: 0 24px 50px rgba(15,23,42,0.35);
+      padding: 1.2rem;
+      overflow: hidden;
+    }
+
+    .hero-visual-main {
+      border-radius: 18px;
+      background: linear-gradient(145deg,#22c55e,#4ade80);
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 0.9rem 1rem;
+      color: #ecfdf5;
+      font-size: 0.9rem;
+    }
+
+    .hero-visual-main::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background: radial-gradient(circle at top left,rgba(248,250,252,0.45),transparent 55%);
+      opacity: 0.6;
+    }
+
+    .hero-visual-main-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-visual-tag {
+      position: absolute;
+      top: 0.85rem;
+      left: 0.9rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      background: rgba(15,23,42,0.35);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      z-index: 2;
+    }
+
+    .hero-visual-metrics {
+      margin-top: 0.9rem;
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 0.55rem;
+      font-size: 0.8rem;
+    }
+
+    .metric-card {
+      border-radius: 12px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(226,232,240,0.85);
+      padding: 0.45rem 0.6rem;
+    }
+
+    .metric-label {
+      opacity: 0.65;
+      font-size: 0.75rem;
+    }
+
+    .metric-value {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .bottom-row {
+      padding: 0.75rem 1.8rem 1.4rem;
+      border-top: 1px dashed rgba(203,213,225,0.9);
+      background: rgba(248,250,252,0.9);
+    }
+
+    @media (max-width: 900px) {
+      .bottom-row {
+        padding: 0.75rem 1.2rem 1.3rem;
+      }
+    }
+
+    .card-strip {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 900px) {
+      .card-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hint-card {
+      border-radius: 16px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(226,232,240,0.9);
+      padding: 0.9rem 0.85rem;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .hint-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.86rem;
+    }
+
+    .hint-body {
+      opacity: 0.8;
+    }
+
+    .hint-link {
+      margin-top: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    .hint-link a {
+      text-decoration: none;
+      color: #2563eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="shell-inner">
+
+    <!-- Top bar -->
+    <div class="top-bar">
+      <div class="brand-mini">
+        <div class="brand-logo">
+          <i class="fa-solid fa-seedling"></i>
+        </div>
+        <span>Food Waste Studio</span>
+      </div>
+      <div class="top-links">
+        <a href="home.html">Dashboard</a>
+        <a href="tracker.html">Tracker</a>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero-row">
+      <div class="hero-copy">
+        <h1>See your kitchen’s impact in one place 🍏</h1>
+        <p>Use this dashboard to understand how many items you’re tracking, what is expiring soon, and where you can save the most food this week.</p>
+
+        <div class="hero-badges">
+          <div class="hero-pill">
+            <i class="fa-regular fa-clock"></i>
+            Live expiry overview
+          </div>
+          <div class="hero-pill">
+            <i class="fa-solid fa-leaf"></i>
+            Less waste, more savings
+          </div>
+          <div class="hero-pill">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            Works right in your browser
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="tracker.html" class="btn btn-primary">
+            <i class="fa-solid fa-list-check me-1"></i>
+            Open tracker
+          </a>
+          <a href="#stats" class="btn-outline">
+            <i class="fa-solid fa-chart-line"></i>
+            View today’s stats
+          </a>
+        </div>
+      </div>
+
+      <!-- Right visual: mini preview + stats -->
+      <div class="hero-visual">
+        <div class="hero-visual-tag">
+          <i class="fa-solid fa-basket-shopping"></i>
+          This week’s snapshot
+        </div>
+        <div class="hero-visual-main">
+          <div class="hero-visual-main-inner">
+            <div style="font-size:0.86rem;opacity:0.9;">Food Waste Tracker</div>
+            <div style="font-size:1.1rem;font-weight:600;">You’re tracking <span id="dashTotalHero">0</span> items</div>
+            <div style="font-size:0.8rem;opacity:0.9;">
+              <span id="dashSoonHero">0</span> expiring soon •
+              <span id="dashExpiredHero">0</span> expired
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual-metrics" id="stats">
+          <div class="metric-card">
+            <div class="metric-label">Tracked items</div>
+            <div class="metric-value">
+              <i class="fa-regular fa-square-check text-primary"></i>
+              <span id="dashTotal">0</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Expiring this week</div>
+            <div class="metric-value">
+              <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+              <span id="dashSoon">0</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Already expired</div>
+            <div class="metric-value">
+              <i class="fa-regular fa-clock text-muted"></i>
+              <span id="dashExpired">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom strip cards -->
+    <div class="bottom-row">
+      <div class="card-strip">
+        <div class="hint-card">
+          <div class="hint-title">
+            <i class="fa-solid fa-pan-food text-success"></i>
+            Start with the tracker
+          </div>
+          <div class="hint-body">
+            Add a few items you already have in your fridge or pantry. The tracker will automatically sort them by urgency.
+          </div>
+          <div class="hint-link">
+            <a href="tracker.html">
+              Go to tracker
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="hint-card">
+          <div class="hint-title">
+            <i class="fa-solid fa-chart-simple text-primary"></i>
+            Watch your numbers shift
+          </div>
+          <div class="hint-body">
+            Come back to this dashboard to see how many items are fresh, close to expiry, or already past their date.
+          </div>
+        </div>
+
+        <div class="hint-card">
+          <div class="hint-title">
+            <i class="fa-solid fa-lightbulb text-warning"></i>
+            Turn insights into action
+          </div>
+          <div class="hint-body">
+            Use the “Tips” page in the tracker to plan a weekly use-it-up meal and cut your food waste over time.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Read the same storage as the tracker page
+  const items = JSON.parse(localStorage.getItem("foodItems")) || [];
+
+  function daysLeft(date) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const exp = new Date(date);
+    exp.setHours(0,0,0,0);
+    return Math.ceil((exp - today) / (1000 * 3600 * 24));
+  }
+
+  function computeDashboardStats() {
+    const total = items.length;
+    let expiring = 0;
+    let expired = 0;
+
+    items.forEach(item => {
+      const d = daysLeft(item.expiry);
+      if (d <= 3 && d >= 0) expiring++;
+      else if (d < 0) expired++;
+    });
+
+    // Fill hero and metric values
+    document.getElementById("dashTotal").textContent = total;
+    document.getElementById("dashSoon").textContent = expiring;
+    document.getElementById("dashExpired").textContent = expired;
+
+    document.getElementById("dashTotalHero").textContent = total;
+    document.getElementById("dashSoonHero").textContent = expiring;
+    document.getElementById("dashExpiredHero").textContent = expired;
+  }
+
+  computeDashboardStats();
+</script>
+</body>
+</html>
