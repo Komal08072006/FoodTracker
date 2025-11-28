@@ -41,14 +41,9 @@ Shows:
 Provides tips for:
 - Minimizing food waste  
 - Food storage techniques  
-- Recipes using leftover food  
+- Recipes using leftover food    
 
-### ✔ 5. Settings  
-- Clear all data  
-- Switch themes (optional)  
-- Manage custom food categories  
-
-### ✔ 6. Multi-page Navigation  
+### ✔ 5. Multi-page Navigation  
 Includes:
 - Home  
 - Log Food  
